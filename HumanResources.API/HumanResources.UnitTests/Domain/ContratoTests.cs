@@ -50,7 +50,7 @@ namespace HumanResources.UnitTests.Domain
         public void Should_Throw_Exception_DataDeInicio_Via_Constructor()
         {
             // Arrange
-            string tipoContrato = "PJ";
+            string tipoContrato = "PJJ";
             
             // Act
             var exception = Record.Exception(() => _contrato = new Contrato(tipoContrato, DATA_INICIO));
