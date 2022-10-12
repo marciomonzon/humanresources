@@ -14,7 +14,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution: '**/HumanResources.sln'
-  project: 'HumanResources.API.csproj'
+  project: '**/HumanResources.API.csproj'
 
 steps:
 
