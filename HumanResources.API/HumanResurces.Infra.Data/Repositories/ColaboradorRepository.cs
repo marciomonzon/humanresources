@@ -1,45 +1,56 @@
 ﻿using HumanResources.Domain.Entities;
 using HumanResources.Domain.Interfaces.Repositories;
+using HumanResurces.Infra.Data.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace HumanResurces.Infra.Data.Repositories
 {
     public class ColaboradorRepository : IColaboradorRepository
     {
-        private readonly IRepositoryBase<Colaborador> _repositoryBase;
+        public readonly DbSet<Colaborador> _dbSet;
+        public readonly ApplicationDbContext _appDbContext;
 
-        public ColaboradorRepository(IRepositoryBase<Colaborador> repositoryBase)
+        public ColaboradorRepository(ApplicationDbContext appDbContext)
         {
-            _repositoryBase = repositoryBase;
+            _dbSet = _appDbContext.Set<Colaborador>();
+            _appDbContext = appDbContext;
         }
 
         public async Task Add(Colaborador colaborador)
         {
-            await _repositoryBase.AddAsync(colaborador);
+            await _appDbContext.AddAsync(colaborador);
         }
 
-        public async Task Update(Colaborador colaborador)
+        public void Update(Colaborador colaborador)
         {
-            await _repositoryBase.UpdateAsync(colaborador);
+            _appDbContext.Update(colaborador);
         }
 
-        public async Task Delete(Colaborador colaborador)
+        public void Delete(Colaborador colaborador)
         {
-            await _repositoryBase.DeleteAsync(colaborador);
+            _appDbContext.Remove(colaborador);
         }
 
         public async Task<IEnumerable<Colaborador>> GetColaborador()
         {
-            return await _repositoryBase.Get();
+            var query = _dbSet.AsQueryable();
+            return await query.ToListAsync();
         }
 
         public async Task<Colaborador> GetColaboradorById(int id)
         {
-            return await _repositoryBase.GetByIdAsyn(id);
+            var query = _dbSet.AsQueryable();
+            query = query.Where(x => x.Id == id).AsNoTracking();
+
+            return await query.FirstOrDefaultAsync();
         }
 
         public async Task<Colaborador> GetContratoByNome(string nome)
         {
-            return await _repositoryBase.GetByFilter(x => x.Nome.Equals(nome, StringComparison.CurrentCultureIgnoreCase));
+            var query = _dbSet.AsQueryable();
+            query = query.Where(x => x.Nome.Equals(nome, StringComparison.CurrentCultureIgnoreCase)).AsNoTracking();
+
+            return await query.FirstOrDefaultAsync();
         }
     }
 }

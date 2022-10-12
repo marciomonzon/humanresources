@@ -1,34 +1,41 @@
 ﻿using HumanResources.Domain.Entities;
 using HumanResources.Domain.Interfaces.Repositories;
+using HumanResurces.Infra.Data.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace HumanResurces.Infra.Data.Repositories
 {
     public class ContratoRepository : IContratoRepository
     {
-        private readonly IRepositoryBase<Contrato> _repositoryBase;
+        public readonly DbSet<Contrato> _dbSet;
+        public readonly ApplicationDbContext _appDbContext;
 
-        public ContratoRepository(IRepositoryBase<Contrato> repositoryBase)
+        public ContratoRepository(ApplicationDbContext appDbContext)
         {
-            _repositoryBase = repositoryBase;
+            _dbSet = _appDbContext.Set<Contrato>();
+            _appDbContext = appDbContext;
         }
 
         public async Task<Contrato> GetContratoById(int id)
         {
-            return await _repositoryBase.GetByIdAsyn(id);    
+            var query = _dbSet.AsQueryable();
+            query = query.Where(x => x.Id == id).AsNoTracking();
+
+            return await query.FirstOrDefaultAsync();
         }
 
         public async Task<Contrato> GetContratoByTipoContrato(string tipoContrato)
         {
-            var contratos = await _repositoryBase.Get(x => x.TipoContrato == tipoContrato);
+            var query = _dbSet.AsQueryable();
+            query = query.Where(x => x.TipoContrato.Equals(tipoContrato, StringComparison.CurrentCultureIgnoreCase)).AsNoTracking();
 
-            return contratos?.FirstOrDefault();
+            return await query.FirstOrDefaultAsync();
         }
 
         public async Task<List<Contrato>> GetContratos()
         {
-            var contratos = await _repositoryBase.Get();
-
-            return contratos?.ToList();
+            var query = _dbSet.AsQueryable();
+            return await query.ToListAsync();
         }
     }
 }

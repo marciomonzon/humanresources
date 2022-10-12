@@ -1,45 +1,48 @@
 ﻿using HumanResources.Domain.Entities;
 using HumanResources.Domain.Interfaces.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using HumanResurces.Infra.Data.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace HumanResurces.Infra.Data.Repositories
 {
     public class CargoFuncaoRepository : ICargoFuncaoRepository
     {
-        private readonly IRepositoryBase<CargoFuncao> _repositoryBase;
+        public readonly DbSet<CargoFuncao> _dbSet;
+        public readonly ApplicationDbContext _appDbContext;
 
-        public CargoFuncaoRepository(IRepositoryBase<CargoFuncao> repositoryBase)
+        public CargoFuncaoRepository(ApplicationDbContext appDbContext)
         {
-            _repositoryBase = repositoryBase;
+            _dbSet = _appDbContext.Set<CargoFuncao>();
+            _appDbContext = appDbContext;
         }
 
         public async Task Add(CargoFuncao cargoFuncao)
         {
-            await _repositoryBase.AddAsync(cargoFuncao);
+            await _appDbContext.AddAsync(cargoFuncao);
         }
 
         public async Task<IEnumerable<CargoFuncao>> GetCargoFuncao()
         {
-            return await _repositoryBase.Get();
+            var query = _dbSet.AsQueryable();
+            return await query.ToListAsync();
         }
 
         public async Task<CargoFuncao> GetCargoFuncaoById(int id)
         {
-            return await _repositoryBase.GetByIdAsyn(id);
+            var query = _dbSet.AsQueryable();
+            query = query.Where(x => x.Id == id).AsNoTracking();
+
+            return await query.FirstOrDefaultAsync();
         }
 
-        public async Task Update(CargoFuncao cargoFuncao)
+        public void Update(CargoFuncao cargoFuncao)
         {
-            await _repositoryBase.UpdateAsync(cargoFuncao);
+            _appDbContext.Update(cargoFuncao);
         }
 
-        public async Task Delete(CargoFuncao cargoFuncao)
+        public void Delete(CargoFuncao cargoFuncao)
         {
-            await _repositoryBase.DeleteAsync(cargoFuncao);
+            _appDbContext.Remove(cargoFuncao);
         }
     }
 }
