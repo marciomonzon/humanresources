@@ -1,6 +1,6 @@
 ﻿namespace HumanResources.Domain.Interfaces.Repositories
 {
-    public interface IUnityOfWork
+    public interface IUnitOfWork
     {
         Task<bool> Commit();
         void Rollback();

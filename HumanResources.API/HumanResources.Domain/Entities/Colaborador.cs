@@ -36,6 +36,9 @@ namespace HumanResources.Domain.Entities
 
         private void SetDataDeNascimento(DateTime dataDeNascimento)
         {
+            if (dataDeNascimento == DateTime.Now)
+                throw new ColaboradorException("Data de Nascimento inválida!");
+
             DataDeNascimento = dataDeNascimento;
         }
 

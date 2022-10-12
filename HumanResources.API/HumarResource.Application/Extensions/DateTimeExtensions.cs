@@ -2,7 +2,7 @@
 {
     public static class DateTimeExtensions
     {
-        public static DateTime? ToDate(this string probDate)
+        public static DateTime ToDate(this string probDate)
         {
             if (!string.IsNullOrWhiteSpace(probDate))
             {
@@ -12,7 +12,7 @@
                     return converted;
                 }
             }
-            return null;
+            return DateTime.Now;
         }
     }
 }

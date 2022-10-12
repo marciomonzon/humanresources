@@ -1,4 +1,6 @@
-﻿using HumanResurces.Infra.Data.Context;
+﻿using HumanResources.Domain.Interfaces.Repositories;
+using HumanResurces.Infra.Data.Context;
+using HumanResurces.Infra.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,8 +17,10 @@ namespace HumanResources.Infra.IoC
                         b => b.MigrationsAssembly(typeof(ApplicationDbContext)
                               .Assembly.FullName)));
 
-            //services.AddScoped<IProductRepository, ProductRepository>();
-            //services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ICargoFuncaoRepository, CargoFuncaoRepository>();
+            services.AddScoped<IColaboradorRepository, ColaboradorRepository>();
+            services.AddScoped<IContratoRepository, ContratoRepository>();
+            services.AddScoped<IUnitOfWork, UnityOfWork>();
 
             return services;
         }

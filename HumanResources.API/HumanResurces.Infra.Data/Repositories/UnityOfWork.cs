@@ -3,7 +3,7 @@ using HumanResurces.Infra.Data.Context;
 
 namespace HumanResurces.Infra.Data.Repositories
 {
-    public class UnityOfWork : IUnityOfWork, IDisposable
+    public class UnityOfWork : IUnitOfWork, IDisposable
     {
         public readonly ApplicationDbContext _appDbContext;
 
@@ -24,7 +24,23 @@ namespace HumanResurces.Infra.Data.Repositories
 
         public void Dispose()
         {
+            this.Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposing)
+            {
+                return;
+            }
+
+            if (_appDbContext == null)
+            {
+                return;
+            }
+
+            _appDbContext.Dispose();
         }
     }
 }

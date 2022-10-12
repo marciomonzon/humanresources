@@ -21,7 +21,7 @@ namespace HumanResurces.Infra.Data.Repositories
             await _appDbContext.AddAsync(cargoFuncao);
         }
 
-        public async Task<IEnumerable<CargoFuncao>> GetCargoFuncao()
+        public async Task<List<CargoFuncao>> GetCargoFuncao()
         {
             var query = _dbSet.AsQueryable();
             return await query.ToListAsync();
