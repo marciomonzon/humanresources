@@ -30,6 +30,13 @@ steps:
     restoreSolution: '$(solution)'
     feedsToUse: 'select'
 
+- task: VSBuild@1
+  name: 'VSBuild'
+  displayName: 'Visual Studio Solution Build'
+  inputs:
+    solution: '**\*.sln' 
+    vsVersion: 'latest'
+
 - task: DotNetCoreCLI@2
   name: 'Tests'
   displayName: 'Run Tests'
