@@ -14,7 +14,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   solution: '**/HumanResources.sln'
-  projects: '**/*.csproj'
+  project: '**/HumanResources.API.csproj'
 
 steps:
 
@@ -44,7 +44,7 @@ steps:
   inputs:
     command: 'publish'
     publishWebProjects: false
-    projects: '$(projects)'
+    projects: '$(project)'
     arguments: '''--configuration $(BuildConfiguration)'' --output $(Build.ArtifactStagingDirectory)'
 
 - task: PublishBuildArtifacts@1
